@@ -75,8 +75,8 @@ function LandingPage() {
         <ProblemSection />
         <FeatureShowcase />
         <LevelsSection />
-        <HowItWorks />
         <SecuritySection />
+        <HowItWorks />
         <FAQSection />
         <FinalCTA />
       </main>

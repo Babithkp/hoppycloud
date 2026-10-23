@@ -1,7 +1,9 @@
 import ComparePageLayout from "./ComparePageLayout";
 import { B, Callout, CheckList, CompareTable, Section, SubSection } from "./CompareParts";
+import { useWaitlistModal } from "../home/WaitlistModalContext";
 
 export default function VsIacPage() {
+  const { openModal } = useWaitlistModal();
   return (
     <ComparePageLayout
       title="Hoppycloud vs infrastructure as code"
@@ -76,9 +78,9 @@ export default function VsIacPage() {
         </div>
         <p>
           Want to see this on your own account?{" "}
-          <a href="/#waitlist" className="text-brand-300 hover:text-brand-200">
+          <button type="button" onClick={openModal} className="text-brand-300 hover:text-brand-200">
             Join the waitlist
-          </a>
+          </button>
           .
         </p>
       </Section>

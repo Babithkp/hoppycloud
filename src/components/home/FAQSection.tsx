@@ -1,6 +1,7 @@
 import { useId, useState } from "react";
 import { ArrowRight, BookOpen, Plus } from "lucide-react";
 import { Reveal, SectionHeading } from "./landingParts";
+import { useWaitlistModal } from "./WaitlistModalContext";
 
 const FAQS = [
   {
@@ -41,6 +42,7 @@ const FAQS = [
 
 /** Objections, answered plainly. An accessible accordion: buttons own their panels via aria-controls. */
 export default function FAQSection() {
+  const { openModal } = useWaitlistModal();
   const [open, setOpen] = useState(0);
   const baseId = useId();
 
@@ -61,9 +63,9 @@ export default function FAQSection() {
               </span>
               <p className="mt-5 font-semibold">Still have a question?</p>
               <p className="mt-1 text-sm text-white/55">Join the waitlist and we'll walk you through connecting your first AWS account personally.</p>
-              <a href="#waitlist" className="mt-4 inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-brand-300 hover:text-brand-200 sm:min-h-0">
+              <button type="button" onClick={openModal} className="mt-4 inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-brand-300 hover:text-brand-200 sm:min-h-0">
                 Join the waitlist <ArrowRight className="size-3.5" aria-hidden />
-              </a>
+              </button>
             </div>
           </Reveal>
         </div>

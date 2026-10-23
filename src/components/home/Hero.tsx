@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import GradientASCII from "../reactbits/GradientASCII";
 import SpecularButton from "../reactbits/SpecularButton";
+import { useWaitlistModal } from "./WaitlistModalContext";
 
 /** Each tab shows a real screen from the demo dashboard (captured from the app in demo mode, dark theme). */
 const TABS = [
@@ -10,9 +11,8 @@ const TABS = [
   { label: "Inventory", image: "/landing/hero-resources.webp", alt: "Every AWS resource across regions in one Hoppycloud list" },
 ];
 
-const scrollToWaitlist = () => document.getElementById("waitlist")?.scrollIntoView({ behavior: "smooth" });
-
 export default function Hero() {
+  const { openModal } = useWaitlistModal();
   const [activeTab, setActiveTab] = useState(0);
   // Bumped on every tab click (even the current one) so the screenshot's entrance animation replays.
   const [swap, setSwap] = useState(0);
@@ -77,7 +77,7 @@ export default function Hero() {
             glow={1}
             followMouse
             proximity={250}
-            onClick={scrollToWaitlist}
+            onClick={openModal}
             style={{ padding: "13px 24px", lineHeight: "20px" }}
           >
             Join the waitlist

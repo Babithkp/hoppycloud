@@ -1,13 +1,14 @@
-import { Check } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import { Reveal } from "./landingParts";
-import WaitlistForm from "./WaitlistForm";
+import { useWaitlistModal } from "./WaitlistModalContext";
 
 const REASSURANCE = ["No credit card to join", "We'll only email you about launch", "Unsubscribe any time"];
 
 /** The last ask, and the one place everyone eventually lands: join the waitlist. */
 export default function FinalCTA() {
+  const { openModal } = useWaitlistModal();
   return (
-    <section id="waitlist" aria-labelledby="cta-title" className="px-6 pb-28 pt-12 md:px-10">
+    <section aria-labelledby="cta-title" className="px-6 pb-28 pt-12 md:px-10">
       <Reveal>
         <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[32px] border border-white/10 bg-[#05060a] px-6 py-20 text-center sm:px-16">
           {/* A soft beam of the hero's blue, falling onto the panel */}
@@ -20,8 +21,14 @@ export default function FinalCTA() {
               <span className="italic text-white/70">in sync.</span>
             </h2>
             <p className="mx-auto mt-6 max-w-xl text-lg text-white/60">Join the waitlist to be first in line when Hoppycloud opens up.</p>
-            <div className="mx-auto mt-10 max-w-md">
-              <WaitlistForm />
+            <div className="mt-10 flex items-center justify-center">
+              <button
+                type="button"
+                onClick={openModal}
+                className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-white px-6 text-sm font-semibold text-black transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+              >
+                Join the waitlist <ArrowRight className="size-4" aria-hidden />
+              </button>
             </div>
             <ul className="mt-8 flex flex-col items-center justify-center gap-x-8 gap-y-2 text-sm text-white/50 sm:flex-row">
               {REASSURANCE.map((r) => (

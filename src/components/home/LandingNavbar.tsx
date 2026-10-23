@@ -1,22 +1,30 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
-import { Menu, X } from "lucide-react";
+import { ChevronDown, Menu, X } from "lucide-react";
+import { useWaitlistModal } from "./WaitlistModalContext";
 
 /** Menu rows slide down into place one after another as the menu opens, and fade out together as it closes. */
 const menuItem = (open: boolean) =>
   `transition-[transform,opacity] duration-300 ease-out motion-reduce:transition-none ${open ? "translate-y-0 opacity-100" : "-translate-y-2 opacity-0"}`;
 
-const LINKS: { label: string; href: string; route?: boolean }[] = [
+const LINKS: { label: string; href: string }[] = [
   { label: "Features", href: "#features" },
   { label: "How it works", href: "#how-it-works" },
   { label: "FAQ", href: "#faq" },
-  { label: "vs AWS Console", href: "/vs-console", route: true },
-  { label: "vs IaC", href: "/vs-iac", route: true },
+];
+
+const COMPARE_LINKS: { label: string; href: string }[] = [
+  { label: "vs AWS Console", href: "/vs-console" },
+  { label: "vs IaC", href: "/vs-iac" },
 ];
 
 export default function LandingNavbar() {
+  const { openModal } = useWaitlistModal();
   // Below lg the links live in a drop-down menu opened from the menu button.
   const [menuOpen, setMenuOpen] = useState(false);
+  // The "Compare" nav item's own dropdown (desktop only — on mobile its links are just listed inline).
+  const [compareOpen, setCompareOpen] = useState(false);
+  const compareRef = useRef<HTMLLIElement>(null);
   // Transparent over the hero at the very top; a dark, blurred bar once the page has scrolled. Stays visible
   // (never slides away) at every scroll depth and direction.
   const [scrolled, setScrolled] = useState(() => typeof window !== "undefined" && window.scrollY > 8);
@@ -41,17 +49,21 @@ export default function LandingNavbar() {
     };
   }, [menuOpen]);
 
+  useEffect(() => {
+    if (!compareOpen) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setCompareOpen(false);
+    const onClick = (e: MouseEvent) => {
+      if (compareRef.current && !compareRef.current.contains(e.target as Node)) setCompareOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("mousedown", onClick);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("mousedown", onClick);
+    };
+  }, [compareOpen]);
+
   const close = () => setMenuOpen(false);
-  const linkEl = (l: (typeof LINKS)[number], className: string, onClick?: () => void) =>
-    l.route ? (
-      <Link to={l.href} className={className} onClick={onClick}>
-        {l.label}
-      </Link>
-    ) : (
-      <a href={l.href} className={className} onClick={onClick}>
-        {l.label}
-      </a>
-    );
 
   return (
     <nav className="fixed inset-x-0 top-0 z-50 px-4 pt-4 md:px-6">
@@ -71,17 +83,55 @@ export default function LandingNavbar() {
 
           <ul className="hidden items-center gap-8 text-sm text-subHeadingColor lg:flex">
             {LINKS.map((l) => (
-              <li key={l.label}>{linkEl(l, "hover:text-white transition-colors")}</li>
+              <li key={l.label}>
+                <a href={l.href} className="transition-colors hover:text-white">
+                  {l.label}
+                </a>
+              </li>
             ))}
+            <li
+              ref={compareRef}
+              className="relative"
+              onMouseEnter={() => setCompareOpen(true)}
+              onMouseLeave={() => setCompareOpen(false)}
+            >
+              <button
+                type="button"
+                onClick={() => setCompareOpen((o) => !o)}
+                aria-expanded={compareOpen}
+                aria-haspopup="true"
+                className="flex items-center gap-1 transition-colors hover:text-white"
+              >
+                Compare
+                <ChevronDown className={`size-3.5 transition-transform duration-200 ${compareOpen ? "rotate-180" : ""}`} aria-hidden />
+              </button>
+              <div
+                className={`absolute left-1/2 top-full z-10 mt-3 w-48 -translate-x-1/2 rounded-xl border border-white/10 bg-[#0b0c10] p-1.5 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.9)] transition-[opacity,transform] duration-150 ${
+                  compareOpen ? "pointer-events-auto translate-y-0 opacity-100" : "pointer-events-none -translate-y-1 opacity-0"
+                }`}
+              >
+                {COMPARE_LINKS.map((l) => (
+                  <Link
+                    key={l.label}
+                    to={l.href}
+                    onClick={() => setCompareOpen(false)}
+                    className="block rounded-lg px-3 py-2 text-sm text-white/70 hover:bg-white/[0.06] hover:text-white"
+                  >
+                    {l.label}
+                  </Link>
+                ))}
+              </div>
+            </li>
           </ul>
 
           <div className="flex items-center gap-3">
-            <a
-              href="/#waitlist"
+            <button
+              type="button"
+              onClick={openModal}
               className="inline-flex min-h-10 items-center rounded-xl bg-[#012a6e] px-5 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90 sm:min-h-0"
             >
               Join waitlist
-            </a>
+            </button>
             <button
               type="button"
               onClick={() => setMenuOpen((o) => !o)}
@@ -115,9 +165,23 @@ export default function LandingNavbar() {
             <ul className="flex flex-col border-t border-white/10 pb-4 pt-2">
               {LINKS.map((l, i) => (
                 <li key={l.label} className={menuItem(menuOpen)} style={{ transitionDelay: menuOpen ? `${60 + i * 35}ms` : "0ms" }}>
-                  {linkEl(l, "flex min-h-12 items-center text-base text-white/80 hover:text-white", close)}
+                  <a href={l.href} onClick={close} className="flex min-h-12 items-center text-base text-white/80 hover:text-white">
+                    {l.label}
+                  </a>
                 </li>
               ))}
+              <li className={menuItem(menuOpen)} style={{ transitionDelay: menuOpen ? `${60 + LINKS.length * 35}ms` : "0ms" }}>
+                <p className="flex min-h-12 items-center text-base text-white/40">Compare</p>
+                <ul className="flex flex-col pl-4">
+                  {COMPARE_LINKS.map((l) => (
+                    <li key={l.label}>
+                      <Link to={l.href} onClick={close} className="flex min-h-11 items-center text-base text-white/80 hover:text-white">
+                        {l.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </li>
             </ul>
           </div>
         </div>

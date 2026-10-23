@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import { useWaitlistModal } from "./WaitlistModalContext";
 
 const COLUMNS: { title: string; links: { label: string; href: string; internal?: boolean }[] }[] = [
   {
@@ -16,13 +17,10 @@ const COLUMNS: { title: string; links: { label: string; href: string; internal?:
       { label: "Hoppycloud vs Console", href: "/vs-console", internal: true },
     ],
   },
-  {
-    title: "Get started",
-    links: [{ label: "Join waitlist", href: "/#waitlist" }],
-  },
 ];
 
 export default function Footer() {
+  const { openModal } = useWaitlistModal();
   const linkClass = "inline-flex min-h-11 items-center text-white/50 transition-colors sm:min-h-0 hover:text-white focus-visible:text-white focus-visible:outline-none";
   return (
     <footer className="border-t border-white/10 bg-[radial-gradient(ellipse_90%_120%_at_50%_100%,#0b3c6b_0%,#001833_45%,#000000_100%)] px-6 pt-16 md:px-10">
@@ -53,6 +51,16 @@ export default function Footer() {
             </ul>
           </nav>
         ))}
+        <nav aria-label="Get started">
+          <p className="text-sm font-semibold">Get started</p>
+          <ul className="mt-2 flex flex-col text-sm sm:mt-4 sm:gap-2.5">
+            <li>
+              <button type="button" onClick={openModal} className={linkClass}>
+                Join waitlist
+              </button>
+            </li>
+          </ul>
+        </nav>
       </div>
 
       <div className="mx-auto mt-14 flex max-w-6xl flex-col gap-2 border-t border-white/10 py-6 text-xs text-white/40 sm:flex-row sm:justify-between">
