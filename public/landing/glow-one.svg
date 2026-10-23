@@ -1,0 +1,22 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="2335.05" height="1536.36" viewBox="0 0 2335.05 1536.36" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Background Gradient1">
+<g id="Rectangle 2" filter="url(#filter0_f_0_242)">
+<path d="M339.2 339.2L1916.1 831.183L1970.3 1079.91L401.819 626.573L339.2 339.2Z" fill="#003790"/>
+</g>
+<g id="Rectangle 3" filter="url(#filter1_f_0_242)">
+<path d="M364.749 456.449L1941.65 948.432L1995.85 1197.16L427.367 743.821L364.749 456.449Z" fill="#0A68FF" fill-opacity="0.5"/>
+</g>
+</g>
+<defs>
+<filter id="filter0_f_0_242" x="-1.43349e-05" y="-7.62939e-06" width="2309.5" height="1419.11" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="169.6" result="effect1_foregroundBlur_0_242"/>
+</filter>
+<filter id="filter1_f_0_242" x="25.5486" y="117.249" width="2309.5" height="1419.11" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="169.6" result="effect1_foregroundBlur_0_242"/>
+</filter>
+</defs>
+</svg>

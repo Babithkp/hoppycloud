@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: "Inter", sans-serif;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Figtree", sans-serif;
+}
+
+.landing-glow {
+  background: radial-gradient(ellipse 80% 60% at 50% 0%, #012a6e55 0%, #000000 70%);
+}
